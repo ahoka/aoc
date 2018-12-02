@@ -36,5 +36,10 @@ namespace AdventOfCode2018
                         .Select(x => x.item))
                         .Where(x => x.Any());
         }
+
+        public static IEnumerable<IEnumerable<T>> Permutations<T>(this IEnumerable<T> set)
+        {
+            return set.SelectMany(x => Permutations(set.Where(y => !y.Equals(x))), (item, perm) => perm.Prepend(item));
+        }
     }
 }
