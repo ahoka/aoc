@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -82,7 +83,35 @@ namespace AdventOfCode2018
 
         public static int SolveFirst()
         {
-            var i = Input().OrderBy(x => x.Date);
+            var schedule = Input().OrderBy(x => x.Date);
+            var guards = new Dictionary<int, int[]>();
+            int currentGuard = 0;
+            int sleepStart = 0;
+
+            foreach (var s in schedule)
+            {
+                switch (s)
+                {
+                    case Shift shift:
+                        currentGuard = shift.Id;
+                        break;
+                    case Sleep sleep:
+                        sleepStart = sleep.Date.Minute;
+                        break;
+                    case WakeUp wake:
+                        var sleepStop = wake.Date.Minute;
+                        var sleepSchedule = new int[60];
+                        for (int i = sleepStart; i < sleepStop; i++)
+                        {
+                            sleepSchedule[i]++;
+                        }
+
+                        //guards.AddOrUpdate(currentGuard, new int[60]
+                        break;
+                }
+            }
+
+            var mrSleepy = guards.OrderByDescending(x => x.Value).First().Key;
 
             return 0;
         }
