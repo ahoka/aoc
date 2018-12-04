@@ -51,5 +51,34 @@ namespace AdventOfCode2018
 
             return Enumerable.Zip(a, b, (x, y) => x + y).ToArray();
         }
+
+        private static Lazy<int[]> _primes = new Lazy<int[]>(() => CalculatePrimes(1_000_000).ToArray());
+        public static IEnumerable<int> Primes => _primes.Value;
+        public static bool IsPrime(int number) => Array.BinarySearch(_primes.Value, number) > 0;
+
+        public static IEnumerable<int> CalculatePrimes(int upto)
+        {
+            var sieve = new bool[upto];
+
+            var limit = (int)Math.Sqrt(upto);
+            for (int i = 2; i < limit; i++)
+            {
+                if (!sieve[i])
+                {
+                    for (int j = (int)Math.Pow(i, 2); j < upto; j += i)
+                    {
+                        sieve[j] = true;
+                    }
+                }
+            }
+
+            for (int i = 2; i < upto; i++)
+            {
+                if (!sieve[i])
+                {
+                    yield return i;
+                }
+            }
+        }
     }
 }
