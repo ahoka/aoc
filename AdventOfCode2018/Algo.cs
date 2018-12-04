@@ -41,5 +41,15 @@ namespace AdventOfCode2018
         {
             return set.SelectMany(x => Permutations(set.Where(y => !y.Equals(x))), (item, perm) => perm.Prepend(item));
         }
+
+        public static int[] Plus(this int[] a, int[] b)
+        {
+            if (a.Length != b.Length)
+            {
+                throw new ArgumentException("Array size must be the same");
+            }
+
+            return Enumerable.Zip(a, b, (x, y) => x + y).ToArray();
+        }
     }
 }

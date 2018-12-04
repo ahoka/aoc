@@ -81,10 +81,10 @@ namespace AdventOfCode2018
                     .Single());
         }
 
-        public static int SolveFirst()
+        private static IDictionary<int, int[]> GuardStatistics()
         {
             var schedule = Input().OrderBy(x => x.Date);
-            var guards = new Dictionary<int, int[]>();
+            var guards = new ConcurrentDictionary<int, int[]>();
             int currentGuard = 0;
             int sleepStart = 0;
 
@@ -106,14 +106,55 @@ namespace AdventOfCode2018
                             sleepSchedule[i]++;
                         }
 
-                        //guards.AddOrUpdate(currentGuard, new int[60]
+                        guards.AddOrUpdate(currentGuard, sleepSchedule, (_, existing) => existing.Plus(sleepSchedule));
                         break;
                 }
             }
 
-            var mrSleepy = guards.OrderByDescending(x => x.Value).First().Key;
-
-            return 0;
+            return guards;
         }
+
+        public static int SolveFirst()
+        {
+            var guards = GuardStatistics();
+
+            var mrSleepy = guards.OrderByDescending(x => x.Value.Sum()).First();
+
+            var sleepySchedule = mrSleepy.Value;
+            int max = 0;
+            for (int i = 0; i < sleepySchedule.Length; i++)
+            {
+                if (sleepySchedule[i] > sleepySchedule[max])
+                {
+                    max = i;
+                }
+            }
+
+            var result1 = mrSleepy.Key * max;
+
+            return result1;
+        }
+
+        public static int SolveSecond()
+        {
+            var guards = GuardStatistics();
+
+            var mrSleepy = guards.OrderByDescending(x => x.Value.Max()).First();
+
+            var sleepySchedule = mrSleepy.Value;
+            int max = 0;
+            for (int i = 0; i < sleepySchedule.Length; i++)
+            {
+                if (sleepySchedule[i] > sleepySchedule[max])
+                {
+                    max = i;
+                }
+            }
+
+            var result = mrSleepy.Key * max;
+
+            return result;
+        }
+
     }
 }
