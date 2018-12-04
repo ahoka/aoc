@@ -114,12 +114,8 @@ namespace AdventOfCode2018
             return guards;
         }
 
-        public static int SolveFirst()
+        private static int MultiplyGuardIdByMostSleepyHour(KeyValuePair<int, int[]> mrSleepy)
         {
-            var guards = GuardStatistics();
-
-            var mrSleepy = guards.OrderByDescending(x => x.Value.Sum()).First();
-
             var sleepySchedule = mrSleepy.Value;
             int max = 0;
             for (int i = 0; i < sleepySchedule.Length; i++)
@@ -135,25 +131,22 @@ namespace AdventOfCode2018
             return result1;
         }
 
+        public static int SolveFirst()
+        {
+            var guards = GuardStatistics();
+
+            var mrSleep1 = guards.OrderByDescending(x => x.Value.Sum()).First();
+
+            return MultiplyGuardIdByMostSleepyHour(mrSleep1);
+        }
+
         public static int SolveSecond()
         {
             var guards = GuardStatistics();
 
-            var mrSleepy = guards.OrderByDescending(x => x.Value.Max()).First();
+            var mrSleep2 = guards.OrderByDescending(x => x.Value.Max()).First();
 
-            var sleepySchedule = mrSleepy.Value;
-            int max = 0;
-            for (int i = 0; i < sleepySchedule.Length; i++)
-            {
-                if (sleepySchedule[i] > sleepySchedule[max])
-                {
-                    max = i;
-                }
-            }
-
-            var result = mrSleepy.Key * max;
-
-            return result;
+            return MultiplyGuardIdByMostSleepyHour(mrSleep2);
         }
 
     }
