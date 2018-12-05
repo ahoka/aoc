@@ -36,5 +36,15 @@ namespace Tests
                                                 new[] { 2 },
                                                 new[] { 1, 2 } });
         }
+
+        [TestMethod]
+        public void TestIsOppositePolarity()
+        {
+            Assert.IsTrue(Day5.ShouldRemove('b', 'B'));
+            Assert.IsTrue(Day5.ShouldRemove('B', 'b'));
+            Assert.IsFalse(Day5.ShouldRemove('a', 'a'));
+            Assert.IsFalse(Day5.ShouldRemove('A', 'A'));
+            Assert.IsFalse(Day5.ShouldRemove('a', 'B'));
+        }
     }
 }

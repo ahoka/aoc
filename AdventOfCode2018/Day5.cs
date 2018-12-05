@@ -10,9 +10,9 @@ namespace AdventOfCode2018
     {
         public static string Input => File.ReadAllText("input5.txt");
 
-        public static bool IsOppositePolarity(char a, char b)
+        public static bool ShouldRemove(char a, char b)
         {
-            if (!char.ToLowerInvariant(a).Equals(char.ToLowerInvariant(b)))
+            if (IsNotSameUnit(a, b))
             {
                 return false;
             }
@@ -26,50 +26,51 @@ namespace AdventOfCode2018
             return false;
         }
 
-        public static string Reduce(string s)
+        public static bool IsNotSameUnit(char a, char b)
         {
-            string prev = s;
-            string current = null;
-            while (true)
+            return !char.ToLowerInvariant(a).Equals(char.ToLowerInvariant(b));
+        }
+
+        public static string Reduce(IEnumerable<char> s)
+        {
+            var a = s.ToList();
+
+            for (int i = 0; i < a.Count - 1;)
             {
-                var sb = new StringBuilder();
-                var p = prev.First();   
-                foreach (var c in prev.Skip(1))
+                if (ShouldRemove(a[i], a[i + 1]))
                 {
-                    if (p.Equals('*'))
-                    {
-                        p = c;
-                    }
-                    else
-                    {
-                        if (IsOppositePolarity(p, c))
-                        {
-                            p = '*';
-                        }
-                        else
-                        {
-                            sb.Append(p);
-                            p = c;
-                        }
-                    }
+                    a.RemoveRange(i, 2);
+                    i = Math.Max(i - 1, 0);
                 }
-
-                if (current.Equals(prev))
+                else
                 {
-                    return current;
+                    i++;
                 }
-
-                prev = current;
             }
+
+            return new string(a.ToArray());
         }
 
         // yYacCAx
-        public static string SolveFirst()
+        public static int SolveFirst()
         {
             var result = Reduce(Input);
             var resultCount = result.Length;
 
-            return result;
+            return resultCount;
+        }
+
+        public static int SolveSecond()
+        {
+            var units = Input.ToLowerInvariant()
+                             .GroupBy(x => x)
+                             .Select(x => x.Key);
+
+            var min = units.Select(unit => Input.Where(x => IsNotSameUnit(x, unit)))
+                           .Select(x => Reduce(x).Count())
+                           .Min();
+
+            return min;
         }
     }
 }
