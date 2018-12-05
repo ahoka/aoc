@@ -12,7 +12,7 @@ namespace AdventOfCode2018
             //var solution1b = Day1.SolveSecond();
             //Console.WriteLine($"Day 1 First Solution: {solution1b}");
 
-            var result = Day4.SolveSecond();
+            var result = Day5.SolveFirst();
             Console.WriteLine(result);
         }
     }
