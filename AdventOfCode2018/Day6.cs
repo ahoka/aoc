@@ -9,26 +9,26 @@ namespace AdventOfCode2018
 {
     public class Day6
     {
-        public class Coordinate
-        {
-            public Coordinate(int x, int y)
-            {
-                X = x;
-                Y = y;
-            }
-
-            public int X { get; }
-            public int Y { get; }
-        }
-
-        private static Regex pattern = new Regex("(?<x>). (?<y>)");
-        public IEnumerable<Coordinate> Input => File.ReadAllLines("input6.txt")
+        private static Regex pattern = new Regex("(?<x>[0-9]+), (?<y>[0-9]+)");
+        public static IEnumerable<Coordinate> Input => File.ReadAllLines("input6.txt")
             .Select(x => pattern.Match(x).Groups)
-            .Select(x => new Coordinate(int.Parse(x['x'].Value), int.Parse(x['y'].Value)));
+            .Select(x => new Coordinate(int.Parse(x["x"].Value), int.Parse(x["y"].Value)));
 
         public static int SolveFirst()
         {
+            var input = Input.ToArray();
 
+            var distanceMatrix = new int[input.Length, input.Length];
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                for (int j = 0; j < input.Length; j++)
+                {
+                    distanceMatrix[i, j] = input[i].ManhattenDistance(input[j]);
+                }
+            }
+
+            return 0;
         }
     }
 }
