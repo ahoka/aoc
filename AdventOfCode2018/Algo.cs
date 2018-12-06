@@ -80,5 +80,19 @@ namespace AdventOfCode2018
                 }
             }
         }
+
+        public static int FindMin<T>(this IList<T> list) where T : IComparable<T>
+        {
+            int min = 0;
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i].CompareTo(list[min]) < 0)
+                {
+                    min = i;
+                }
+            }
+
+            return min;
+        }
     }
 }

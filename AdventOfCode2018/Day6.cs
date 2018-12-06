@@ -18,17 +18,69 @@ namespace AdventOfCode2018
         {
             var input = Input.ToArray();
 
-            var distanceMatrix = new int[input.Length, input.Length];
+            var areas = new float[input.Length];
 
-            for (int i = 0; i < input.Length; i++)
+            int startI = input.Min(c => c.X) - 1;
+            int endI = input.Max(c => c.X) + 1;
+            int startJ = input.Min(c => c.Y) - 1;
+            int endJ = input.Max(c => c.Y) + 1;
+
+            for (int i = startI; i < endI; i++)
             {
-                for (int j = 0; j < input.Length; j++)
+                for (int j = startJ; j < endJ; j++)
                 {
-                    distanceMatrix[i, j] = input[i].ManhattenDistance(input[j]);
+                    var distanceFromCoordinates = input
+                        .Select(x => x.ManhattenDistance(new Coordinate(i, j)))
+                        .ToList();
+
+                    var min = distanceFromCoordinates.FindMin();
+
+                    if (i == startI || j == startJ || i == endI - 1 || j == endJ - 1)
+                    {
+                        areas[min] = float.PositiveInfinity;
+                    }
+                    else
+                    {
+                        areas[min] += 1;
+                    }
                 }
             }
 
-            return 0;
+            var result = areas.Where(x => !float.IsPositiveInfinity(x))
+                .OrderByDescending(x => x)
+                .First();
+
+            return (int)result;
+        }
+
+        public static int SolveSecond()
+        {
+            var input = Input.ToArray();
+            int isNear = 0;
+
+            int startI = input.Min(c => c.X) - 1;
+            int endI = input.Max(c => c.X) + 1;
+            int startJ = input.Min(c => c.Y) - 1;
+            int endJ = input.Max(c => c.Y) + 1;
+
+            for (int i = startI; i < endI; i++)
+            {
+                for (int j = startJ; j < endJ; j++)
+                {
+                    var distanceSum = input
+                        .Select(x => x.ManhattenDistance(new Coordinate(i, j)))
+                        .Sum();
+
+                    if (distanceSum < 10_000)
+                    {
+                        isNear += 1;
+                    }
+                }
+            }
+
+            var result = isNear;
+
+            return result;
         }
     }
 }
