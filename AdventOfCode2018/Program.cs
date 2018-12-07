@@ -6,7 +6,7 @@ namespace AdventOfCode2018
     {
         static void Main(string[] args)
         {
-            var result = Day6.SolveFirst();
+            var result = Day7.SolveFirst();
             Console.WriteLine(result);
         }
     }
